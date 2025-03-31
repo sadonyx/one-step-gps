@@ -1,0 +1,33 @@
+{
+  "name": "assessment-ui",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -b && vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@googlemaps/js-api-loader": "^1.16.8",
+    "@typescript-eslint/parser": "^5.62.0",
+    "eslint": "^8.57.1",
+    "google-maps-api-loader": "^1.1.1",
+    "oh-vue-icons": "^1.0.0-rc3",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@types/google.maps": "^3.58.1",
+    "@types/lodash": "^4.17.16",
+    "@vitejs/plugin-vue": "^5.2.1",
+    "@vue/tsconfig": "^0.7.0",
+    "prettier": "^3.5.3",
+    "prettier-eslint": "^16.3.0",
+    "raw-loader": "^4.0.2",
+    "typescript": "^5.8.2",
+    "vite": "^6.2.0",
+    "vite-svg-loader": "^5.1.0",
+    "vue-eslint-parser": "^8.3.0",
+    "vue-tsc": "^2.2.4"
+  }
+}

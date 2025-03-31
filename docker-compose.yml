@@ -1,0 +1,59 @@
+services:
+
+  mongodb:
+    image: mongo
+    mem_limit: 1g
+    container_name: mongodb
+    restart: always
+    ports:
+      - 27017:27017
+    volumes:
+      - ${HOME}/dev/data/mongodb:/data/db
+    logging:
+      driver: local
+      options:
+        max-size: 10m
+        max-file: 3
+    env_file: ./assessmentAPI/.env
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 60s
+      start_period: 4s
+    networks:
+      - local
+
+  assessment-ui:
+    container_name: assessment-ui
+    build:
+      context: ./assessmentUI
+      dockerfile: ./Dockerfile
+    depends_on:
+      - assessment-api
+    ports:
+      - 4173:4173
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4173"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    networks:
+      - local
+
+  assessment-api:
+    container_name: assessment-api
+    build:
+      context: ./assessmentAPI
+      dockerfile: ./Dockerfile
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    ports:
+    - 8080:8080
+    networks:
+      - local
+
+networks:
+  local:
+    driver: bridge
