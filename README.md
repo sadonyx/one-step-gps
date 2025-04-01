@@ -20,6 +20,9 @@ From the root of the project directory, run the command `docker compose up`. Thi
 2. Then, run the command `npm run build`.
 3. Finally, run the command `npm run preview`
 
+MongoDB:
+The server will not run unless MongoDB is running and listening on port 27017. On my machine, I used the official Docker MongoDB image.
+
 Regardless of which method you choose, you can navigate to the user interface in your browser at `http://localhost:4173`.
 
 # Design
