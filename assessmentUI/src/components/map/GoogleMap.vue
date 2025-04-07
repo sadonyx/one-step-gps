@@ -60,21 +60,27 @@ const emit = defineEmits(['mounted']);
 watch(
   () => [devices?.value, preferences.value.hiddenDevices],
   () => {
-    if (
-      preferences.value.hiddenDevices &&
-      preferences.value.hiddenDevices.includes(infoWindowDeviceId.value ?? '')
-    ) {
-      infoWindow.value?.close();
-    }
-    if (devices?.value.length && Object.keys(markers.value).length) {
+    if (Object.keys(markers.value).length) {
       updateMarkers();
-    } else {
+    } else if (devices?.value.length) {
       createMarkers();
       updateMarkers();
     }
   },
   {
     deep: true,
+  },
+);
+
+watch(
+  () => preferences.value.hiddenDevices,
+  () => {
+    if (
+      preferences.value.hiddenDevices &&
+      preferences.value.hiddenDevices.includes(infoWindowDeviceId.value ?? '')
+    ) {
+      infoWindow.value?.close();
+    }
   },
 );
 
@@ -108,8 +114,6 @@ watch(
 
 onMounted(async () => {
   await initializeMap();
-  createMarkers();
-  updateMarkers();
   emit('mounted');
 });
 
@@ -170,7 +174,6 @@ async function initializeMap() {
 
 function createMarkers() {
   if (!mapStore?.map.value) {
-    // map not initialized
     return;
   }
 
@@ -199,12 +202,15 @@ function createMarkers() {
             lng: device.latestDevicePoint.lng,
           },
           title: device.displayName,
+          gmpClickable: true,
           content: null,
         });
 
-        marker.addEventListener('click', (e) => {
+        // showw info window for clicked marker
+        marker.addEventListener('gmp-click', (e) => {
           e.stopPropagation();
           infoWindowDeviceId.value = device.deviceId;
+          followingDeviceStore?.setFollowingDeviceId(device.deviceId);
         });
 
         newMarkers[device.deviceId] = marker;
@@ -241,7 +247,7 @@ function updateMarkers(): void {
         marker.map = null;
       }
     } catch (error) {
-      console.error(`Could not update marker for ${device.deviceId}:`, error);
+      // console.error(`Could not update marker for ${device.deviceId}:`, error);
     }
   });
 }
