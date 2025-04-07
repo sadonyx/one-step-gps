@@ -5,6 +5,7 @@ import {
   onMounted,
   ref,
   unref,
+  toRaw,
   watch,
   type Reactive,
   type Ref,
@@ -72,7 +73,7 @@ watch(
     if (followingDeviceId.value) {
       followSelectedDevice(followingDeviceId.value);
 
-      const device = devices?.value.find(
+      const device = toRaw(devices).value.find(
         (d) => d.deviceId === followingDeviceId.value,
       );
 
@@ -83,7 +84,10 @@ watch(
         // periodic fetch
         intervalId.value = setInterval(
           () => {
-            geocode?.getLocation(device);
+            const currentDevice = toRaw(devices).value.find(
+              (d) => d.deviceId === followingDeviceId.value,
+            );
+            geocode?.getLocation(currentDevice || device);
           },
           (preferences.value.pollingFrequency ?? 5) * 1000,
         );
@@ -93,6 +97,7 @@ watch(
     cleanUp(() => clearInterval(intervalId.value));
   },
 );
+
 
 watch(
   () => devices?.value,

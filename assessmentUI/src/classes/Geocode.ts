@@ -1,4 +1,3 @@
-import { type Reactive } from 'vue';
 import type { Device } from '../types/types';
 
 type AddressData = {
@@ -24,7 +23,7 @@ export type Place = {
   lastUpdated: number;
 };
 
-type Places = Reactive<{ [deviceId: string]: Place }>;
+type Places = { [deviceId: string]: Place }
 
 const streetTypeAbbreviations: { [key: string]: string } = {
   Avenue: 'Ave',
@@ -108,7 +107,7 @@ export class Geocode {
       }
     } else if (online && driveStatus === 'driving') {
       // remove from cache if active again
-      this.deviceIdCache.slice(indexInCache, 1);
+      this.deviceIdCache.splice(indexInCache, 1);
     }
   }
 
@@ -172,7 +171,7 @@ export class Geocode {
   static splitAtFirstComma(str: string) {
     const index = str.indexOf(',');
     if (index === -1) {
-      return [str]; // If no comma, return the original string in an array
+      return [str]; // if no comma, return the original string in an array
     }
 
     return [str.slice(0, index), str.slice(index + 1)];
