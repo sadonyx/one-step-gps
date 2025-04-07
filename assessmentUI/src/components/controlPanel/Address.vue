@@ -32,9 +32,6 @@ watch(
     <p v-for="info in showAddress()">
       {{ info }}
     </p>
-    <!-- <p v-if="props.place.lastUpdated">
-      {{ formatTimeAgo(props.place.lastUpdated) }}
-    </p> -->
     <p v-if="props.place" class="last-updated">
       Last updated {{ formatTimeAgo(props.place.lastUpdated) }}
     </p>
